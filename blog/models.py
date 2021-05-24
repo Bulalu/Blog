@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+
 # Create your models here.
 
 
@@ -28,6 +29,9 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     objects = models.Manager() # The default manager.
     published = PublishedManager() # Our custom manager.
+   #the tags manager will allow you to add, retrieve, and remove tags from post
+  
+    
 
     class Meta:
         ordering = ('-publish',) #most recent publishes to appear first

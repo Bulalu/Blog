@@ -1,10 +1,13 @@
+from django.contrib.postgres import search
+from django.db.models import query
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 from django.core.mail import send_mail
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from .models import Post
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, SearchForm
 
 from django.views.generic import DetailView
 # Create your views here.
@@ -14,7 +17,6 @@ class PostListView(ListView):
     model = Post
     paginate_by = 3
     context_object_name = 'posts' #default post_list
-  
 
 
 def post_detail(request, year, month, day, post):
@@ -77,3 +79,25 @@ def post_share(request, post_id):
     ctx= {'form':form, 'post':post, 'sent':sent}
     return render(request, 'blog/post_share.html', ctx)
 
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            search_vector = SearchVector('title', 'body')
+            search_query = SearchQuery(query)
+            results = Post.objects.annotate(
+                    search=search_vector,
+                    rank=SearchRank(search_vector,search_query)
+                ).filter(search=search_query).order_by('-rank')
+
+    ctx = {
+        'form':form,
+        'query':query,
+        'results':results,
+    }
+    return render(request, 'blog/post_search.html', ctx)
