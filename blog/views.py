@@ -15,8 +15,10 @@ from django.views.generic import DetailView
 #a queryset is collection of database queries to retrieve objects from the database
 class PostListView(ListView):
     model = Post
-    paginate_by = 3
+    paginate_by = 4
+    template_name ='blog.html'
     context_object_name = 'posts' #default post_list
+    
 
 
 def post_detail(request, year, month, day, post):
@@ -101,3 +103,17 @@ def post_search(request):
         'results':results,
     }
     return render(request, 'blog/post_search.html', ctx)
+
+
+
+def index(request):
+    return render(request, 'index.html')
+
+def blogpost(request):
+    return render(request, 'blog.html')
+
+def postview(request):
+    return render(request, 'post.html')
+
+
+ 

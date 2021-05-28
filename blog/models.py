@@ -6,11 +6,11 @@ from django.urls import reverse
 # Create your models here.
 
 
-#custom manager - Post.published.all()
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super(PublishedManager,self).get_queryset().filter(status='published')
+class Category(models.Model):
+    name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
 
 
 class Post(models.Model):
@@ -27,10 +27,9 @@ class Post(models.Model):
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    objects = models.Manager() # The default manager.
-    published = PublishedManager() # Our custom manager.
-   #the tags manager will allow you to add, retrieve, and remove tags from post
-  
+    thumbnail = models.ImageField()
+    category = models.ManyToManyField(Category)
+   
     
 
     class Meta:

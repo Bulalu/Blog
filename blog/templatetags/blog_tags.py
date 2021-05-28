@@ -19,6 +19,10 @@ def show_latest_posts(count=5):
     return {'latest_posts': latest_posts}
 
 @register.simple_tag
+def latest_posts():
+    return Post.objects.order_by('-publish')[:3]
+    
+@register.simple_tag
 def get_most_commented_posts(count=5):
     return Post.objects.annotate(
                 total_comments=Count('comments')
@@ -29,3 +33,4 @@ def get_most_commented_posts(count=5):
 @register.filter(name='markdown')
 def markdown_format(text):
     return mark_safe(markdown.markdown(text))
+
