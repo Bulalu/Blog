@@ -1,9 +1,32 @@
-{% extends "base.html" %}
+{% extends "cool_base.html" %}
 {% load blog_tags %}
 
 {% block title%} Search {% endblock %}
 
 {% block content %} 
+<style>
+    img{
+  max-height: 200px;
+  width: auto;
+  overflow: hidden;
+  padding: 0;
+
+    }
+    @media (max-width: 991px) {
+  img {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
+    max-height: 300px;
+    min-height: auto !important;
+  }
+   img {
+    width: 100%;
+    height: auto !important;
+
+</style>
+
+<div class='content'>
     {% if query %}
      <h1> Post Containing "{{query}}"</h1>
         <h3>
@@ -13,9 +36,11 @@
         </h3>
 
         {% for post in results %}
-        <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+        <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4> 
+
+         <a href="{{ post.get_absolute_url }}"><img src="{{post.thumbnail.url}}" alt=""></a>
         
-            {{ post.body|markdown|truncatewords_html:5 }}
+           
         {% empty %}
             <p>There are no results for your query</p>
         {% endfor %}
@@ -23,12 +48,54 @@
 
     {% else %}
         <h1> Search for posts </h1>
-        <form action="" method="GET">
-            {{form.as_p}}
-            <input type="submit" value="Submit">
-        </form>
+        <div class="widget search" >
+        
+            <form action="" class="search-form" method="GET" style="width: 50%;">
+              <div class="form-group">
+                <input type="search" name="query" placeholder="What are you looking for?" >
+                <button type="submit" class="submit"><i class="icon-search"></i></button>
+              </div>
+            </form>
+          </div>
     {% endif %}
+    
 
-
-
+        
+   
 {% endblock %}
+
+
+<section class="latest-posts"> 
+      
+    <div class="container">
+    
+      
+      <div class="row">
+        {% for post in results %}
+        <div class="post col-md-4">
+          <div class="post-thumbnail">
+            <a href="{{post.get_absolute_url}}"><img src="{{ post.thumbnail.url }}"alt="..." class="img-fluid">
+            </a>
+          </div>
+          <div class="post-details">
+            <div class="post-meta d-flex justify-content-between">
+              <div class="date">{{ post.created }}</div>
+              <div class="category">
+                {% for cat in post.category.all %}
+                <a href="{{post.get_absolute_url}}">{{cat}}</a>
+                {% endfor %}
+              </div>
+            </div>
+            <a href="{{post.get_absolute_url}}">
+              <h3 class="h4">{{post.title}}</h3>
+            </a>
+            <p class="text-muted">{{post.body}}</p>
+            
+          </div>
+              
+        </div>
+        {% endfor %} 
+      </div>
+    </div>
+  </section>
+

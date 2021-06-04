@@ -34,6 +34,9 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
+  
+   'filebrowser',
+     # 'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,9 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'tinymce',
+    'marketing',
+    
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'django.contrib.postgres',
+    'django.contrib.humanize' ,
 
     
 ]
@@ -82,24 +89,25 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blog_db',
+        'NAME': 'my_awesome_blog',
         'USER': 'postgres',
         'PASSWORD':'python2021',
         'HOST': 'localhost',
-        'POST': '5432'
+        'PORT': '5432'
 
     }
 }
- """
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
+
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.sqlite3',
+   #     'NAME': BASE_DIR / 'db.sqlite3',
+    #}
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -144,11 +152,15 @@ EMAIL_USE_TLS = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (BASE_DIR/"static",)
-STATIC_ROOT = BASE_DIR/'django_static_files'
-   
 MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = (BASE_DIR/"static",)
+
+   
+STATIC_ROOT = BASE_DIR/'django_static_files'
 MEDIA_ROOT = BASE_DIR/ "media" 
+
+#FILEBROWSER_DIRECTORY = MEDIA_ROOT
 
 
 # Default primary key field type
@@ -156,3 +168,33 @@ MEDIA_ROOT = BASE_DIR/ "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#WYSIWG 
+#tinymce- html text-editor
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'width': 1120,
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'theme': 'modern',
+    'plugins': '''
+            textcolor save link image media preview codesample contextmenu
+            table code lists fullscreen  insertdatetime  nonbreaking
+            contextmenu directionality searchreplace wordcount visualblocks
+            visualchars code fullscreen autolink lists  charmap print  hr
+            anchor pagebreak
+            ''',
+    'toolbar1': '''
+            fullscreen preview bold italic underline | fontselect,
+            fontsizeselect  | forecolor backcolor | alignleft alignright |
+            aligncenter alignjustify | indent outdent | bullist numlist table |
+            | link image media | codesample |
+            ''',
+    'toolbar2': '''
+            visualblocks visualchars |
+            charmap hr pagebreak nonbreaking anchor |  code |
+            ''',
+    'contextmenu': 'formats | link image',
+    'menubar': True,
+    'statusbar': True,
+    }
